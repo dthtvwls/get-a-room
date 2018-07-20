@@ -13,7 +13,7 @@ app.secret_key = os.urandom(32)
 def index():
     if 'credentials' not in flask.session:
         redirect_uri = flask.request.url_root
-        if flask.request.headers.get('X-Forwarded-Proto') == 'https'
+        if flask.request.headers.get('X-Forwarded-Proto') == 'https':
             redirect_uri = redirect_uri.replace('http://', 'https://')
 
         flow = oauth2client.client.OAuth2WebServerFlow(
