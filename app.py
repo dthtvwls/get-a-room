@@ -12,11 +12,15 @@ app.secret_key = os.urandom(32)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if 'credentials' not in flask.session:
+        redirect_uri = flask.request.url_root
+        if flask.request.headers.get('X-Forwarded-Proto') == 'https'
+            redirect_uri = redirect_uri.replace('http://', 'https://')
+
         flow = oauth2client.client.OAuth2WebServerFlow(
             client_id=os.getenv('GOOGLE_CLIENT_ID'),
             client_secret=os.getenv('GOOGLE_CLIENT_SECRET'),
             scope=['https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/admin.directory.resource.calendar.readonly'],
-            redirect_uri=flask.request.url_root
+            redirect_uri=redirect_uri
         )
 
         code = flask.request.args.get('code')
